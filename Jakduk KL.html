@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Pembangunan Kependudukan - Renaksi PJPK</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+  <div class="flex min-h-screen">
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-slate-200 p-4 flex flex-col justify-between shrink-0">
+      <div>
+        <!-- Logo Header -->
+        <div class="flex items-center gap-3 px-2 py-3 mb-6">
+          <div class="bg-blue-600 text-white p-2 rounded-lg">
+            <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-slate-900 leading-tight">Dashboard</h1>
+            <p class="text-xs font-semibold text-blue-600">Pembangunan Kependudukan</p>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="space-y-1 text-sm font-medium">
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            Monitoring & Verifikasi
+          </a>
+          
+          <div>
+            <button class="w-full flex items-center justify-between px-3 py-2.5 text-blue-600 bg-blue-50/50 rounded-lg font-semibold">
+              <span class="flex items-center gap-3">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                Renaksi PJPK
+              </span>
+              <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </button>
+            <div class="pl-9 pr-2 py-1 space-y-1">
+              <a href="#" class="block px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md">Input Dokumen</a>
+              <a href="#" class="block px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md">Evaluasi Capaian</a>
+            </div>
+          </div>
+
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+            Pengaturan
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0">
+      <!-- Topbar Header -->
+      <header class="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between">
+        <div class="w-96 relative">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" placeholder="Cari provinsi/data..." class="w-full pl-9 pr-4 py-2 bg-slate-100 border-none rounded-full text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> MYSQL: FALLBACK
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> CLOUD: OFFLINE
+          </span>
+          <div class="h-6 w-px bg-slate-200"></div>
+          <button class="relative p-2 text-slate-400 hover:text-slate-600">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+          </button>
+          <div class="flex items-center gap-2 pl-2">
+            <div class="text-right">
+              <p class="text-xs font-bold text-slate-800">Kementerian / Lembaga Terkait</p>
+              <p class="text-[10px] text-slate-500">----</p>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
+              U
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content Body -->
+      <div class="p-8 space-y-6 flex-1 overflow-y-auto">
+        <!-- Title & Primary Actions -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">KEMENTERIAN / LEMBAGA</h2>
+            <div class="flex items-center gap-2 text-xs text-slate-500 mt-1">
+              <span>NASIONAL</span>
+              <span class="px-2 py-0.5 bg-slate-200 text-slate-700 rounded font-semibold text-[10px]">STATUS: HASIL TELAAH: DRAFT</span>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <button class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i> Ajukan Permintaan Telaah
+            </button>
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+              <i data-lucide="save" class="w-3.5 h-3.5"></i> Simpan Perubahan
+            </button>
+          </div>
+        </div>
+
+        <!-- MAIN TAB NAVIGATION (2 TABS) -->
+        <div class="bg-white p-1.5 rounded-xl border border-slate-200 flex gap-2 shadow-sm">
+          <button onclick="switchTab('section2')" id="tab-section2" class="tab-btn flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100">
+            <i data-lucide="line-chart" class="w-4 h-4"></i>
+            1. Capaian Indikator
+          </button>
+          <button onclick="switchTab('section3')" id="tab-section3" class="tab-btn flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-semibold transition-all bg-blue-600 text-white shadow">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            2. Implementasi Renaksi
+          </button>
+        </div>
+
+        <!-- SECTION CONTENT CONTAINER -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          
+          <!-- SECTION CAPAIAN INDIKATOR -->
+          <div id="section2" class="tab-content hidden p-6 space-y-4">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+              <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i> Capaian Indikator
+              </h3>
+              <div class="flex items-center gap-2">
+                <label for="yearFilter2" class="text-xs font-semibold text-slate-600">Filter Tahun:</label>
+                <select id="yearFilter2" class="bg-slate-100 border border-slate-300 text-xs font-semibold rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-y border-slate-200 text-slate-600 font-semibold uppercase tracking-wider">
+                    <th class="p-3 w-12 text-center">No</th>
+                    <th class="p-3 min-w-[200px]">Indikator PJPK per Sasaran</th>
+                    <th class="p-3 w-32">Satuan</th>
+                    <th class="p-3 w-40">Sumber Data</th>
+                    <th class="p-3 w-28">Target (Dokumen)</th>
+                    <th class="p-3 w-36">Capaian (Input Admin Jakduk)</th>
+                    <th class="p-3 w-28 text-center">Status Capaian</th>
+                    <th class="p-3 w-56">Kendala / Tanggapan Renaksi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                  <tr class="bg-teal-700 text-white font-bold">
+                    <td colspan="8" class="p-2.5 px-4 text-xs tracking-wide">
+                      SASARAN 1: PENGELOLAAN KUANTITAS PENDUDUK
+                    </td>
+                  </tr>
+                  <!-- Indikator 1 -->
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 text-center font-medium text-slate-500">1</td>
+                    <td class="p-3 font-semibold text-slate-800">1. Total Fertility Rate (TFR)</td>
+                    <td class="p-3"><input type="text" value="Anak / WUS" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3"><input type="text" value="SDKI / BPS" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3"><input type="text" value="2.1" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-md font-semibold text-slate-600"></td>
+                    <td class="p-3"><input type="text" value="2.1" oninput="updateStatus(this, '2.1', 'status-1', 'kendala-1')" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3 text-center">
+                      <span id="status-1" class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300">Hijau</span>
+                    </td>
+                    <td class="p-3">
+                      <textarea id="kendala-1" placeholder="Isi kendala jika merah..." disabled class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none text-xs disabled:bg-slate-100 disabled:text-slate-400" rows="1">-</textarea>
+                    </td>
+                  </tr>
+                  <!-- Indikator 2 -->
+                  <tr class="hover:bg-slate-50">
+                    <td class="p-3 text-center font-medium text-slate-500">2</td>
+                    <td class="p-3 font-semibold text-slate-800">2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun</td>
+                    <td class="p-3"><input type="text" value="Kelahiran per 1000 WUS" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3"><input type="text" value="BPS / Sensus" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3"><input type="text" value="18" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-md font-semibold text-slate-600"></td>
+                    <td class="p-3"><input type="text" value="22" oninput="updateStatus(this, '18', 'status-2', 'kendala-2', true)" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3 text-center">
+                      <span id="status-2" class="px-3 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-300">Merah</span>
+                    </td>
+                    <td class="p-3">
+                      <textarea id="kendala-2" placeholder="Isi kendala jika merah..." class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none text-xs" rows="1">Sosialisasi belum mencakup daerah terpencil</textarea>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SECTION IMPLEMENTASI RENAKSI -->
+          <div id="section3" class="tab-content p-5 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i data-lucide="list-checks" class="w-4 h-4 text-blue-600"></i> Implementasi Rencana Aksi
+              </h3>
+              <div class="flex items-center gap-2">
+                <label for="yearFilter3" class="text-xs font-semibold text-slate-600">Filter Tahun:</label>
+                <select id="yearFilter3" class="bg-slate-100 border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1 outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <tbody class="divide-y divide-slate-200">
+                  <!-- Header Sasaran -->
+                  <tr class="bg-teal-700 text-white font-bold">
+                    <td colspan="8" class="p-2.5 px-4 text-xs tracking-wide uppercase">
+                      SASARAN 1: PENGELOLAAN KUANTITAS PENDUDUK
+                    </td>
+                  </tr>
+
+                  <!-- GRUP INDIKATOR 1 -->
+                  <!-- Baris Judul Indikator 1 -->
+                  <tr class="bg-slate-50/80 border-b border-slate-200">
+                    <td colspan="8" class="p-3">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 text-sm">1. Total Fertility Rate (TFR)</span>
+                        <button onclick="addRenaksi(this)" class="flex items-center gap-1.5 px-3 py-1 bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-md text-xs font-semibold transition shadow-sm">
+                          <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Renaksi
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Header Kolom Tabel Indikator 1 -->
+                  <tr class="bg-white border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px] header-kolom-renaksi">
+                    <td class="p-2.5 w-1/5">RENCANA AKSI</td>
+                    <td class="p-2.5 w-1/6">KELUARAN</td>
+                    <td class="p-2.5 w-1/5">DESKRIPSI PELAKSANAAN</td>
+                    <td class="p-2.5 w-1/6">BUKTI DUKUNG (LINK)</td>
+                    <td class="p-2.5 w-1/5">DAYA DUKUNG / KENDALA</td>
+                    <td class="p-2.5 w-28">K/L PENGAMPU</td>
+                    <td class="p-2.5 w-28">K/L TERKAIT</td>
+                    <td class="p-2.5 w-10 text-center">AKSI</td>
+                  </tr>
+
+                  <!-- Row Input Renaksi 1 -->
+                  <tr class="renaksi-row hover:bg-slate-50/50">
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Rencana aksi baru..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isian User..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Deskripsikan..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <input type="url" placeholder="https://link-bukti.com" class="w-full p-2 border rounded border-slate-200 text-xs text-blue-600 outline-none focus:ring-1 focus:ring-blue-500">
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isi daya dukung/kendala..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
+                    </td>
+                    <td class="p-2.5 align-top text-center">
+                      <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition mt-1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- GRUP INDIKATOR 2 -->
+                  <!-- Baris Judul Indikator 2 -->
+                  <tr class="bg-slate-50/80 border-b border-slate-200">
+                    <td colspan="8" class="p-3">
+                      <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 text-sm">2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun</span>
+                        <button onclick="addRenaksi(this)" class="flex items-center gap-1.5 px-3 py-1 bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-md text-xs font-semibold transition shadow-sm">
+                          <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Renaksi
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Header Kolom Tabel Indikator 2 -->
+                  <tr class="bg-white border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px] header-kolom-renaksi">
+                    <td class="p-2.5 w-1/5">RENCANA AKSI</td>
+                    <td class="p-2.5 w-1/6">KELUARAN</td>
+                    <td class="p-2.5 w-1/5">DESKRIPSI PELAKSANAAN</td>
+                    <td class="p-2.5 w-1/6">BUKTI DUKUNG (LINK)</td>
+                    <td class="p-2.5 w-1/5">DAYA DUKUNG / KENDALA</td>
+                    <td class="p-2.5 w-28">K/L PENGAMPU</td>
+                    <td class="p-2.5 w-28">K/L TERKAIT</td>
+                    <td class="p-2.5 w-10 text-center">AKSI</td>
+                  </tr>
+
+                  <!-- Row Input Renaksi Indikator 2 -->
+                  <tr class="renaksi-row hover:bg-slate-50/50">
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Rencana aksi baru..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isian User..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Deskripsikan..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <input type="url" placeholder="https://link-bukti.com" class="w-full p-2 border rounded border-slate-200 text-xs text-blue-600 outline-none focus:ring-1 focus:ring-blue-500">
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isi daya dukung/kendala..."></textarea>
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
+                    </td>
+                    <td class="p-2.5 align-top">
+                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
+                    </td>
+                    <td class="p-2.5 align-top text-center">
+                      <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition mt-1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Tab Switcher Logic
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white', 'shadow');
+        btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      
+      const activeBtn = document.getElementById('tab-' + tabId);
+      activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow');
+      activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    }
+
+    // Dynamic Status Indicator Logic
+    function updateStatus(inputEl, targetVal, statusId, kendalaId, isLowerBetter = false) {
+      const val = parseFloat(inputEl.value);
+      const target = parseFloat(targetVal);
+      const statusEl = document.getElementById(statusId);
+      const kendalaEl = document.getElementById(kendalaId);
+
+      let isSuccess = isLowerBetter ? (val <= target) : (val >= target);
+
+      if (isNaN(val)) {
+        statusEl.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-300";
+        statusEl.innerText = "Pending";
+        kendalaEl.disabled = true;
+      } else if (isSuccess) {
+        statusEl.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300";
+        statusEl.innerText = "Hijau";
+        kendalaEl.disabled = true;
+        kendalaEl.value = "-";
+      } else {
+        statusEl.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-300";
+        statusEl.innerText = "Merah";
+        kendalaEl.disabled = false;
+      }
+    }
+
+    // Fixed Add Renaksi Row Logic: Always insert below the last input row of the current section
+    function addRenaksi(btn) {
+      const headerRow = btn.closest('tr');
+      let insertAfterRow = headerRow;
+
+      // Cari baris terakhir dalam kelompok indikator ini (sebelum baris indikator berikutnya atau akhir tabel)
+      let nextRow = headerRow.nextElementSibling;
+      while (nextRow && !nextRow.querySelector('button[onclick^="addRenaksi"]') && !nextRow.classList.contains('bg-teal-700')) {
+        insertAfterRow = nextRow;
+        nextRow = nextRow.nextElementSibling;
+      }
+
+      // Elemen baris baru
+      const newRow = document.createElement('tr');
+      newRow.className = "renaksi-row hover:bg-slate-50/50";
+      
+      newRow.innerHTML = `
+        <td class="p-2.5 align-top">
+          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Rencana aksi baru..."></textarea>
+        </td>
+        <td class="p-2.5 align-top">
+          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isian User..."></textarea>
+        </td>
+        <td class="p-2.5 align-top">
+          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Deskripsikan..."></textarea>
+        </td>
+        <td class="p-2.5 align-top">
+          <input type="url" placeholder="https://link-bukti.com" class="w-full p-2 border rounded border-slate-200 text-xs text-blue-600 outline-none focus:ring-1 focus:ring-blue-500">
+        </td>
+        <td class="p-2.5 align-top">
+          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isi daya dukung/kendala..."></textarea>
+        </td>
+        <td class="p-2.5 align-top">
+          <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
+        </td>
+        <td class="p-2.5 align-top">
+          <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
+        </td>
+        <td class="p-2.5 align-top text-center">
+          <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition mt-1">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+          </button>
+        </td>
+      `;
+      
+      // Sisipkan di bawah baris input terakhir
+      insertAfterRow.after(newRow);
+      lucide.createIcons();
+    }
+
+    // Remove Renaksi Row Logic
+    function removeRenaksi(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+    }
+  </script>
+</body>
+</html>
