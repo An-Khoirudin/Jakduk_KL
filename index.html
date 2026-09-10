@@ -8,11 +8,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SheetJS (XLSX) CDN untuk Export Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body { font-family: 'Inter', sans-serif; }
     
-    /* Mencegah scrollbar pada textarea */
     textarea.auto-expand {
       overflow: hidden;
       resize: none;
@@ -59,6 +60,12 @@
               <a href="#" class="block px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md">Evaluasi Capaian</a>
             </div>
           </div>
+
+          <!-- NAV OUTPUT BARU -->
+          <button onclick="showOutputView()" id="nav-output" class="w-full flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors text-left font-medium">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+            Output
+          </button>
 
           <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
             <i data-lucide="settings" class="w-4 h-4"></i>
@@ -108,7 +115,7 @@
               <span class="px-2 py-0.5 bg-slate-200 text-slate-700 rounded font-semibold text-[10px]">STATUS: HASIL TELAAH: DRAFT</span>
             </div>
           </div>
-          <div class="flex gap-3">
+          <div id="topActionBtns" class="flex gap-3">
             <button id="btnTelaah" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
               <i data-lucide="send" class="w-3.5 h-3.5"></i> Ajukan Permintaan Telaah
             </button>
@@ -118,7 +125,8 @@
           </div>
         </div>
 
-        <div class="bg-white p-1.5 rounded-xl border border-slate-200 flex gap-2 shadow-sm">
+        <!-- TABS UTAMA (RENAKSI) -->
+        <div id="renaksiTabs" class="bg-white p-1.5 rounded-xl border border-slate-200 flex gap-2 shadow-sm">
           <button onclick="switchTab('section2')" id="tab-section2" class="tab-btn flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100">
             <i data-lucide="line-chart" class="w-4 h-4"></i>
             1. Capaian Indikator
@@ -129,7 +137,8 @@
           </button>
         </div>
 
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <!-- VIEW 1: INPUT RENAKSI CONTAINER -->
+        <div id="renaksiContainer" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           
           <!-- SECTION CAPAIAN INDIKATOR -->
           <div id="section2" class="tab-content hidden p-6 space-y-4">
@@ -213,7 +222,7 @@
                   <label for="yearFilter3" class="text-xs font-semibold text-slate-600">Tahun:</label>
                   <select id="yearFilter3" class="bg-slate-50 border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1.5 outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="2025">2025</option>
-                    <option value="2026">2026</option>
+                    <option value="2026" selected>2026</option>
                   </select>
                 </div>
               </div>
@@ -230,7 +239,7 @@
                   </tr>
 
                   <!-- GRUP INDIKATOR 1 -->
-                  <tr class="bg-slate-50/80 border-b border-slate-200 indikator-group" data-indikator="1. Total Fertility Rate (TFR)">
+                  <tr class="bg-slate-50/80 border-b border-slate-200 indikator-group" data-indikator="1. Total Fertility Rate (TFR)" data-satuan="Anak / WUS" data-sumber="SDKI / BPS" data-target="2.1" data-capaian="2.1" data-status="Hijau">
                     <td colspan="10" class="p-3">
                       <div class="flex items-center justify-between">
                         <span class="font-bold text-slate-800 text-sm indikator-title">1. Total Fertility Rate (TFR)</span>
@@ -255,21 +264,18 @@
                   </tr>
 
                   <!-- Baris 1: BKKBN -->
-                  <tr class="renaksi-row hover:bg-slate-50/50" data-pengampu="BKKBN" data-indikator="1. Total Fertility Rate (TFR)">
+                  <tr class="renaksi-row hover:bg-slate-50/50" data-pengampu="BKKBN" data-indikator="1. Total Fertility Rate (TFR)" data-tahun="2026">
                     <td class="p-2.5 align-top font-medium text-slate-800 cell-rencana-aksi">Pelaksanaan Kampanye Keluarga Berencana di Daerah Terpencil</td>
                     <td class="p-2.5 align-top text-slate-600 cell-keluaran">Terlaksananya 12 Kali Sosialisasi</td>
                     
-                    <!-- DESKRIPSI PELAKSANAAN -->
                     <td class="p-2.5 align-top">
                       <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi deskripsi..." class="kl-input cell-deskripsi auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">Sosialisasi telah diselenggarakan di 12 titik terpencil dengan total peserta 500 orang dari target awal 400 orang.</textarea>
                     </td>
 
-                    <!-- BUKTI DUKUNG -->
                     <td class="p-2.5 align-top">
                       <input type="text" placeholder="https://..." value="https://link-bukti.com/laporan" class="kl-input cell-bukti w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-blue-600 underline outline-none focus:ring-1 focus:ring-blue-500">
                     </td>
 
-                    <!-- DAYA DUKUNG / KENDALA -->
                     <td class="p-2.5 align-top">
                       <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi kendala..." class="kl-input cell-kendala auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">Akses transportasi ke wilayah terpencil agak sulit, namun didukung penuh oleh Dinas Kesehatan Pemda setempat.</textarea>
                     </td>
@@ -285,7 +291,6 @@
                       <span class="block text-[10px] font-bold text-emerald-600 status-label-validasi">VALID</span>
                     </td>
 
-                    <!-- CATATAN PERBAIKAN -->
                     <td class="p-2.5 align-top cell-catatan-container">
                       <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Tambah catatan..." class="cell-catatan auto-expand w-full p-2 border rounded border-slate-200 text-xs text-slate-700 focus:ring-1 focus:ring-blue-500 outline-none">Data sudah lengkap dan sesuai dengan target keluaran.</textarea>
                     </td>
@@ -303,7 +308,7 @@
                   </tr>
 
                   <!-- GRUP INDIKATOR 2 -->
-                  <tr class="bg-slate-50/80 border-b border-slate-200 indikator-group" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun">
+                  <tr class="bg-slate-50/80 border-b border-slate-200 indikator-group" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun" data-satuan="Per 1000 WUS" data-sumber="BPS" data-target="18" data-capaian="19.5" data-status="Kuning">
                     <td colspan="10" class="p-3">
                       <div class="flex items-center justify-between">
                         <span class="font-bold text-slate-800 text-sm indikator-title">2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun</span>
@@ -328,7 +333,7 @@
                   </tr>
 
                   <!-- Baris 2: Kemendikbudristek -->
-                  <tr class="renaksi-row hover:bg-slate-50/50" data-pengampu="Kemendikbudristek" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun">
+                  <tr class="renaksi-row hover:bg-slate-50/50" data-pengampu="Kemendikbudristek" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun" data-tahun="2026">
                     <td class="p-2.5 align-top font-medium text-slate-800 cell-rencana-aksi">Edukasi Kesehatan Reproduksi Remaja di Sekolah</td>
                     <td class="p-2.5 align-top text-slate-600 cell-keluaran">Laporan Edukasi Remaja</td>
                     
@@ -375,6 +380,66 @@
           </div>
 
         </div>
+
+        <!-- VIEW 2: OUTPUT VIEW CONTAINER -->
+        <div id="outputContainer" class="hidden bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div>
+              <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                <i data-lucide="file-spreadsheet" class="w-5 h-5 text-blue-600"></i> Matriks Output Implementation Renaksi
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">Ringkasan output terintegrasi dari input Renaksi Admin</p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <label for="outputYearFilter" class="text-xs font-semibold text-slate-600">Filter Tahun:</label>
+                <select id="outputYearFilter" onchange="renderOutputTable()" class="bg-slate-50 border border-slate-300 text-xs font-semibold rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="ALL">Semua Tahun</option>
+                  <option value="2025">2025</option>
+                  <option value="2026" selected>2026</option>
+                </select>
+              </div>
+
+              <button onclick="exportToExcel()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i> Export ke Excel
+              </button>
+            </div>
+          </div>
+
+          <!-- TABEL OUTPUT -->
+          <div class="overflow-x-auto">
+            <table id="outputTable" class="w-full text-left text-xs border-collapse border border-slate-200">
+              <thead>
+                <!-- HEADER BARIS 1 -->
+                <tr class="bg-slate-100 text-slate-700 font-bold text-center border-b border-slate-200">
+                  <th rowspan="2" class="p-2 border border-slate-200 w-10">No</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[150px]">Kementerian/Lembaga</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[180px]">Indikator</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 w-24">Satuan</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 w-28">Sumber Data</th>
+                  <th colspan="3" id="tahunHeaderLabel" class="p-2 border border-slate-200 bg-slate-200/70">Tahun (2026)</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[200px]">Rencana Aksi</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[180px]">Keluaran</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 w-24">Checklist Pelaksanaan</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[200px]">Deskripsi Pelaksanaan</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[150px]">Bukti Dukung</th>
+                  <th rowspan="2" class="p-2 border border-slate-200 min-w-[200px]">Daya Dukung dan/atau Kendala</th>
+                </tr>
+                <!-- HEADER BARIS 2 (UNTUK KOLOM TAHUN) -->
+                <tr class="bg-slate-100 text-slate-700 font-bold text-center border-b border-slate-200">
+                  <th class="p-2 border border-slate-200 w-20">Target</th>
+                  <th class="p-2 border border-slate-200 w-20">Capaian</th>
+                  <th class="p-2 border border-slate-200 w-24">Status</th>
+                </tr>
+              </thead>
+              <tbody id="outputTbody" class="divide-y divide-slate-200 bg-white">
+                <!-- Data di-render dinamis via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
@@ -471,17 +536,368 @@
     let currentRole = 'admin'; 
     const klUserIdentity = 'BKKBN';
 
-    // FUNGSI UTAMA AUTO-EXPAND TEXTAREA (BEBAS SCROLLBAR)
     function autoExpandTextarea(textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = textarea.scrollHeight + 'px';
     }
 
-    // Terapkan penyesuaian tinggi ke semua textarea saat halaman dimuat
     function adjustAllTextareas() {
       document.querySelectorAll('textarea.auto-expand').forEach(textarea => {
         autoExpandTextarea(textarea);
       });
+    }
+
+    // TOGGLE MENU OUTPUT & RENAKSI
+    function showOutputView() {
+      document.getElementById('renaksiContainer').classList.add('hidden');
+      document.getElementById('renaksiTabs').classList.add('hidden');
+      document.getElementById('outputContainer').classList.remove('hidden');
+
+      // Update Active Navigation State
+      document.getElementById('nav-output').className = "w-full flex items-center gap-3 px-3 py-2.5 text-blue-600 bg-blue-50/50 font-semibold rounded-lg transition-colors text-left";
+      document.getElementById('nav-admin').className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
+      document.getElementById('nav-kl').className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
+
+      document.getElementById('mainPageTitle').innerText = "OUTPUT IMPLEMENTASI RENAKSI";
+      document.getElementById('topActionBtns').classList.add('hidden');
+
+      renderOutputTable();
+    }
+
+    // NAVIGASI KEMBALI KE RENAKSI
+    function switchRoleView(role) {
+      currentRole = role;
+
+      document.getElementById('renaksiContainer').classList.remove('hidden');
+      document.getElementById('renaksiTabs').classList.remove('hidden');
+      document.getElementById('outputContainer').classList.add('hidden');
+      document.getElementById('topActionBtns').classList.remove('hidden');
+
+      const navAdmin = document.getElementById('nav-admin');
+      const navKl = document.getElementById('nav-kl');
+      const navOutput = document.getElementById('nav-output');
+      const title = document.getElementById('mainPageTitle');
+      const btnTelaah = document.getElementById('btnTelaah');
+      const profileName = document.getElementById('userProfileName');
+      const profileRole = document.getElementById('userProfileRole');
+      const profileAvatar = document.getElementById('userProfileAvatar');
+
+      navOutput.className = "w-full flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors text-left font-medium";
+
+      if (role === 'admin') {
+        navAdmin.className = "w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors";
+        navKl.className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
+
+        title.innerText = "KEMENTERIAN / LEMBAGA (ADMIN)";
+        btnTelaah.classList.remove('hidden');
+        profileName.innerText = "Admin Jakduk";
+        profileRole.innerText = "Administrator System";
+        profileAvatar.innerText = "A";
+
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+
+        document.querySelectorAll('.renaksi-row').forEach(row => {
+          row.querySelectorAll('.kl-input').forEach(input => {
+            input.setAttribute('readonly', 'readonly');
+            input.classList.remove('bg-white', 'border-slate-300');
+            input.classList.add('bg-slate-50', 'border-slate-200');
+          });
+          
+          const catatanInput = row.querySelector('.cell-catatan');
+          if (catatanInput) {
+            catatanInput.removeAttribute('readonly');
+            catatanInput.classList.remove('bg-slate-50', 'border-transparent');
+            catatanInput.classList.add('bg-white', 'border-slate-300');
+          }
+        });
+
+      } else {
+        navKl.className = "w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors";
+        navAdmin.className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
+
+        title.innerText = "INPUT RENAKSI K/L (" + klUserIdentity + ")";
+        btnTelaah.classList.add('hidden');
+        profileName.innerText = klUserIdentity;
+        profileRole.innerText = "Pengguna K/L Pengampu";
+        profileAvatar.innerText = "BK";
+
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+
+        document.querySelectorAll('.renaksi-row').forEach(row => {
+          const pengampu = row.getAttribute('data-pengampu');
+          const isOwner = (pengampu === klUserIdentity);
+
+          row.querySelectorAll('.kl-input').forEach(input => {
+            if (isOwner) {
+              input.removeAttribute('readonly');
+              input.classList.remove('bg-slate-50', 'border-slate-200');
+              input.classList.add('bg-white', 'border-slate-300', 'shadow-sm');
+            } else {
+              input.setAttribute('readonly', 'readonly');
+              input.classList.remove('bg-white', 'border-slate-300', 'shadow-sm');
+              input.classList.add('bg-slate-50', 'border-slate-200');
+            }
+          });
+
+          const catatanInput = row.querySelector('.cell-catatan');
+          if (catatanInput) {
+            catatanInput.setAttribute('readonly', 'readonly');
+            catatanInput.classList.remove('bg-white', 'border-slate-300');
+            catatanInput.classList.add('bg-slate-50', 'border-transparent');
+          }
+        });
+      }
+
+      adjustAllTextareas();
+    }
+
+    // HELPER UNTUK MENGHILANGKAN NOMOR DI DEPAN INDIKATOR
+    function cleanIndikatorName(name) {
+      if (!name) return '-';
+      return name.replace(/^\d+[\.\)]\s*/, '').trim();
+    }
+
+    // RENDER GENERATE DYNAMIC DATA OUTPUT TABLE WITH SORTING & MERGING
+    function renderOutputTable() {
+      const selectedYear = document.getElementById('outputYearFilter').value;
+      document.getElementById('tahunHeaderLabel').innerText = selectedYear === 'ALL' ? 'Tahun (Semua)' : `Tahun (${selectedYear})`;
+
+      const outputTbody = document.getElementById('outputTbody');
+      outputTbody.innerHTML = '';
+
+      const rows = document.querySelectorAll('.renaksi-row');
+      const dataList = [];
+
+      rows.forEach(row => {
+        const rowYear = row.getAttribute('data-tahun') || '2026';
+        if (selectedYear !== 'ALL' && rowYear !== selectedYear) return;
+
+        const pengampu = row.getAttribute('data-pengampu') || '-';
+        const rawIndikatorName = row.getAttribute('data-indikator') || '-';
+        const cleanedIndikatorName = cleanIndikatorName(rawIndikatorName);
+
+        // Cari data indikator dari header indikator
+        const indikatorHeader = document.querySelector(`.indikator-group[data-indikator="${rawIndikatorName}"]`);
+        const satuan = indikatorHeader ? (indikatorHeader.getAttribute('data-satuan') || '-') : '-';
+        const sumber = indikatorHeader ? (indikatorHeader.getAttribute('data-sumber') || '-') : '-';
+        const target = indikatorHeader ? (indikatorHeader.getAttribute('data-target') || '-') : '-';
+        const capaian = indikatorHeader ? (indikatorHeader.getAttribute('data-capaian') || '-') : '-';
+        const status = indikatorHeader ? (indikatorHeader.getAttribute('data-status') || '-') : '-';
+
+        const renaksi = row.querySelector('.cell-rencana-aksi')?.innerText || '-';
+        const keluaran = row.querySelector('.cell-keluaran')?.innerText || '-';
+
+        const isValid = row.querySelector('.cell-validasi-toggle')?.checked;
+        const checklistIcon = isValid 
+          ? `<span class="inline-flex items-center justify-center text-emerald-600 bg-emerald-100 p-1 rounded-full"><i data-lucide="check-circle-2" class="w-5 h-5"></i></span>` 
+          : `<span class="inline-flex items-center justify-center text-slate-300"><i data-lucide="circle" class="w-5 h-5"></i></span>`;
+
+        const deskripsi = row.querySelector('.cell-deskripsi')?.value || '-';
+        const buktiLink = row.querySelector('.cell-bukti')?.value || '';
+        const kendala = row.querySelector('.cell-kendala')?.value || '-';
+
+        dataList.push({
+          pengampu,
+          indikatorName: cleanedIndikatorName,
+          satuan,
+          sumber,
+          target,
+          capaian,
+          status,
+          renaksi,
+          keluaran,
+          checklistIcon,
+          deskripsi,
+          buktiLink,
+          kendala
+        });
+      });
+
+      if (dataList.length === 0) {
+        outputTbody.innerHTML = `<tr><td colspan="14" class="p-4 text-center text-slate-400">Tidak ada data untuk ditayangkan.</td></tr>`;
+        return;
+      }
+
+      // 1. URUTKAN BERDASARKAN NAMA KEMENTERIAN > INDIKATOR
+      dataList.sort((a, b) => {
+        const cmpKL = a.pengampu.localeCompare(b.pengampu, 'id', { sensitivity: 'base' });
+        if (cmpKL !== 0) return cmpKL;
+        return a.indikatorName.localeCompare(b.indikatorName, 'id', { sensitivity: 'base' });
+      });
+
+      // 2. LOGIKA MERGE CELL (ROWSPAN)
+      let i = 0;
+      let rowIndex = 1;
+
+      while (i < dataList.length) {
+        let klSpan = 1;
+        while (i + klSpan < dataList.length && dataList[i + klSpan].pengampu === dataList[i].pengampu) {
+          klSpan++;
+        }
+
+        let j = i;
+        while (j < i + klSpan) {
+          let indSpan = 1;
+          while (
+            j + indSpan < i + klSpan && 
+            dataList[j + indSpan].indikatorName === dataList[j].indikatorName &&
+            dataList[j + indSpan].satuan === dataList[j].satuan &&
+            dataList[j + indSpan].sumber === dataList[j].sumber &&
+            dataList[j + indSpan].target === dataList[j].target &&
+            dataList[j + indSpan].capaian === dataList[j].capaian &&
+            dataList[j + indSpan].status === dataList[j].status
+          ) {
+            indSpan++;
+          }
+
+          for (let k = j; k < j + indSpan; k++) {
+            const item = dataList[k];
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50 border-b border-slate-200";
+
+            let htmlStr = `<td class="p-2.5 border border-slate-200 text-center font-medium text-slate-500 align-top">${rowIndex++}</td>`;
+
+            if (k === i) {
+              htmlStr += `<td rowspan="${klSpan}" class="p-2.5 border border-slate-200 font-semibold text-slate-800 align-top">${item.pengampu}</td>`;
+            }
+
+            if (k === j) {
+              htmlStr += `
+                <td rowspan="${indSpan}" class="p-2.5 border border-slate-200 text-slate-800 font-medium align-top">${item.indikatorName}</td>
+                <td rowspan="${indSpan}" class="p-2.5 border border-slate-200 text-slate-600 align-top">${item.satuan}</td>
+                <td rowspan="${indSpan}" class="p-2.5 border border-slate-200 text-slate-600 align-top">${item.sumber}</td>
+                <td rowspan="${indSpan}" class="p-2.5 border border-slate-200 text-center font-semibold text-slate-700 align-top">${item.target}</td>
+                <td rowspan="${indSpan}" class="p-2.5 border border-slate-200 text-center font-semibold text-slate-700 align-top">${item.capaian}</td>
+                <td rowspan="${indSpan}" class="p-2.5 border border-slate-200 text-center align-top">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border">${item.status}</span>
+                </td>
+              `;
+            }
+
+            htmlStr += `
+              <td class="p-2.5 border border-slate-200 text-slate-800 align-top">${item.renaksi}</td>
+              <td class="p-2.5 border border-slate-200 text-slate-700 align-top">${item.keluaran}</td>
+              <td class="p-2.5 border border-slate-200 text-center align-top">${item.checklistIcon}</td>
+              <td class="p-2.5 border border-slate-200 text-slate-700 align-top">${item.deskripsi}</td>
+              <td class="p-2.5 border border-slate-200 align-top">
+                ${item.buktiLink ? `<a href="${item.buktiLink}" target="_blank" class="text-blue-600 underline font-medium truncate block max-w-[150px]">${item.buktiLink}</a>` : '-'}
+              </td>
+              <td class="p-2.5 border border-slate-200 text-slate-700 align-top">${item.kendala}</td>
+            `;
+
+            tr.innerHTML = htmlStr;
+            outputTbody.appendChild(tr);
+          }
+
+          j += indSpan;
+        }
+
+        i += klSpan;
+      }
+
+      lucide.createIcons();
+    }
+
+    // FUNGSI EXPORT KE EXCEL (MENGGUNAKAN SHEETJS)
+    function exportToExcel() {
+      const selectedYear = document.getElementById('outputYearFilter').value;
+      const dataToExport = [];
+
+      // Header Kolom Excel
+      dataToExport.push([
+        "No", 
+        "Kementerian/Lembaga", 
+        "Indikator", 
+        "Satuan", 
+        "Sumber Data", 
+        "Target", 
+        "Capaian", 
+        "Status Capaian", 
+        "Rencana Aksi", 
+        "Keluaran", 
+        "Checklist Pelaksanaan", 
+        "Deskripsi Pelaksanaan", 
+        "Bukti Dukung", 
+        "Daya Dukung dan/atau Kendala"
+      ]);
+
+      const rows = document.querySelectorAll('.renaksi-row');
+      const tempArray = [];
+
+      rows.forEach(row => {
+        const rowYear = row.getAttribute('data-tahun') || '2026';
+        if (selectedYear !== 'ALL' && rowYear !== selectedYear) return;
+
+        const pengampu = row.getAttribute('data-pengampu') || '-';
+        const rawIndikatorName = row.getAttribute('data-indikator') || '-';
+        const cleanedIndikatorName = cleanIndikatorName(rawIndikatorName);
+
+        const indikatorHeader = document.querySelector(`.indikator-group[data-indikator="${rawIndikatorName}"]`);
+        const satuan = indikatorHeader ? (indikatorHeader.getAttribute('data-satuan') || '-') : '-';
+        const sumber = indikatorHeader ? (indikatorHeader.getAttribute('data-sumber') || '-') : '-';
+        const target = indikatorHeader ? (indikatorHeader.getAttribute('data-target') || '-') : '-';
+        const capaian = indikatorHeader ? (indikatorHeader.getAttribute('data-capaian') || '-') : '-';
+        const status = indikatorHeader ? (indikatorHeader.getAttribute('data-status') || '-') : '-';
+
+        const renaksi = row.querySelector('.cell-rencana-aksi')?.innerText || '-';
+        const keluaran = row.querySelector('.cell-keluaran')?.innerText || '-';
+
+        const isValid = row.querySelector('.cell-validasi-toggle')?.checked;
+        const checklist = isValid ? "Tercentang (Valid)" : "Belum Valid";
+
+        const deskripsi = row.querySelector('.cell-deskripsi')?.value || '-';
+        const buktiLink = row.querySelector('.cell-bukti')?.value || '-';
+        const kendala = row.querySelector('.cell-kendala')?.value || '-';
+
+        tempArray.push({
+          pengampu,
+          indikatorName: cleanedIndikatorName,
+          satuan,
+          sumber,
+          target,
+          capaian,
+          status,
+          renaksi,
+          keluaran,
+          checklist,
+          deskripsi,
+          buktiLink,
+          kendala
+        });
+      });
+
+      // Urutkan data Excel sesuai urutan tampilan tabel
+      tempArray.sort((a, b) => {
+        const cmpKL = a.pengampu.localeCompare(b.pengampu, 'id', { sensitivity: 'base' });
+        if (cmpKL !== 0) return cmpKL;
+        return a.indikatorName.localeCompare(b.indikatorName, 'id', { sensitivity: 'base' });
+      });
+
+      let indexNumber = 1;
+      tempArray.forEach(item => {
+        dataToExport.push([
+          indexNumber++,
+          item.pengampu,
+          item.indikatorName,
+          item.satuan,
+          item.sumber,
+          item.target,
+          item.capaian,
+          item.status,
+          item.renaksi,
+          item.keluaran,
+          item.checklist,
+          item.deskripsi,
+          item.buktiLink,
+          item.kendala
+        ]);
+      });
+
+      const worksheet = XLSX.utils.aoa_to_sheet(dataToExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Output Renaksi");
+
+      XLSX.writeFile(workbook, `Output_Renaksi_PJPK_${selectedYear}.xlsx`);
     }
 
     // SEARCH & FILTER FUNCTION
@@ -519,7 +935,6 @@
         }
       });
 
-      // Penyesuaian ulang tinggi teks setelah filter
       adjustAllTextareas();
     }
 
@@ -533,89 +948,6 @@
         label.innerText = 'PERBAIKAN';
         label.className = 'block text-[10px] font-bold text-rose-600 status-label-validasi';
       }
-    }
-
-    // PERUBAHAN PERAN USER (ADMIN & KL)
-    function switchRoleView(role) {
-      currentRole = role;
-
-      const navAdmin = document.getElementById('nav-admin');
-      const navKl = document.getElementById('nav-kl');
-      const title = document.getElementById('mainPageTitle');
-      const btnTelaah = document.getElementById('btnTelaah');
-      const profileName = document.getElementById('userProfileName');
-      const profileRole = document.getElementById('userProfileRole');
-      const profileAvatar = document.getElementById('userProfileAvatar');
-
-      if (role === 'admin') {
-        navAdmin.className = "w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors";
-        navKl.className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
-
-        title.innerText = "KEMENTERIAN / LEMBAGA (ADMIN)";
-        btnTelaah.classList.remove('hidden');
-        profileName.innerText = "Admin Jakduk";
-        profileRole.innerText = "Administrator System";
-        profileAvatar.innerText = "A";
-
-        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-
-        // Mode Admin: Tiga kolom KL dikunci (ReadOnly), Catatan Perbaikan Aktif
-        document.querySelectorAll('.renaksi-row').forEach(row => {
-          row.querySelectorAll('.kl-input').forEach(input => {
-            input.setAttribute('readonly', 'readonly');
-            input.classList.remove('bg-white', 'border-slate-300');
-            input.classList.add('bg-slate-50', 'border-slate-200');
-          });
-          
-          const catatanInput = row.querySelector('.cell-catatan');
-          if (catatanInput) {
-            catatanInput.removeAttribute('readonly');
-            catatanInput.classList.remove('bg-slate-50', 'border-transparent');
-            catatanInput.classList.add('bg-white', 'border-slate-300');
-          }
-        });
-
-      } else {
-        // Mode KL
-        navKl.className = "w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors";
-        navAdmin.className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
-
-        title.innerText = "INPUT RENAKSI K/L (" + klUserIdentity + ")";
-        btnTelaah.classList.add('hidden');
-        profileName.innerText = klUserIdentity;
-        profileRole.innerText = "Pengguna K/L Pengampu";
-        profileAvatar.innerText = "BK";
-
-        document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-
-        // Mode KL: Hanya pengampu yang sesuai yang BISA mengisi dalam KOTAK / BOX
-        document.querySelectorAll('.renaksi-row').forEach(row => {
-          const pengampu = row.getAttribute('data-pengampu');
-          const isOwner = (pengampu === klUserIdentity);
-
-          row.querySelectorAll('.kl-input').forEach(input => {
-            if (isOwner) {
-              input.removeAttribute('readonly');
-              input.classList.remove('bg-slate-50', 'border-slate-200');
-              input.classList.add('bg-white', 'border-slate-300', 'shadow-sm');
-            } else {
-              input.setAttribute('readonly', 'readonly');
-              input.classList.remove('bg-white', 'border-slate-300', 'shadow-sm');
-              input.classList.add('bg-slate-50', 'border-slate-200');
-            }
-          });
-
-          // Catatan Perbaikan Read-Only untuk KL
-          const catatanInput = row.querySelector('.cell-catatan');
-          if (catatanInput) {
-            catatanInput.setAttribute('readonly', 'readonly');
-            catatanInput.classList.remove('bg-white', 'border-slate-300');
-            catatanInput.classList.add('bg-slate-50', 'border-transparent');
-          }
-        });
-      }
-
-      adjustAllTextareas();
     }
 
     function switchTab(tabId) {
@@ -728,7 +1060,15 @@
         
         let insertAfterRow = currentTriggerHeader;
         let nextRow = currentTriggerHeader.nextElementSibling;
-        while (nextRow && !nextRow.classList.contains('indikator-group') && !nextRow.classList.contains('sasaran-header')) {
+
+        while (nextRow) {
+          const isNextGroupHeader = nextRow.classList.contains('indikator-group') && nextRow.getAttribute('data-indikator') !== parentIndikator;
+          const isSasaranHeader = nextRow.classList.contains('sasaran-header');
+
+          if (isNextGroupHeader || isSasaranHeader) {
+            break;
+          }
+
           insertAfterRow = nextRow;
           nextRow = nextRow.nextElementSibling;
         }
@@ -737,6 +1077,7 @@
         newRow.className = "renaksi-row hover:bg-slate-50/50";
         newRow.setAttribute('data-pengampu', pengampu);
         newRow.setAttribute('data-indikator', parentIndikator);
+        newRow.setAttribute('data-tahun', '2026');
         newRow.innerHTML = `
           <td class="p-2.5 align-top font-medium text-slate-800 cell-rencana-aksi">${rencanaAksi}</td>
           <td class="p-2.5 align-top text-slate-600 cell-keluaran">${keluaran}</td>
@@ -787,7 +1128,6 @@
       filterTable();
     }
 
-    // Panggil pengaturan otomatis tinggi teks saat dokumen dimuat awal
     document.addEventListener("DOMContentLoaded", () => {
       adjustAllTextareas();
       switchRoleView('admin');
