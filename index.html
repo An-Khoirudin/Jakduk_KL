@@ -11,6 +11,12 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body { font-family: 'Inter', sans-serif; }
+    
+    /* Mencegah scrollbar pada textarea */
+    textarea.auto-expand {
+      overflow: hidden;
+      resize: none;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -19,7 +25,6 @@
     <!-- SIDEBAR -->
     <aside class="w-64 bg-white border-r border-slate-200 p-4 flex flex-col justify-between shrink-0">
       <div>
-        <!-- Logo Header -->
         <div class="flex items-center gap-3 px-2 py-3 mb-6">
           <div class="bg-blue-600 text-white p-2 rounded-lg">
             <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
@@ -30,7 +35,6 @@
           </div>
         </div>
 
-        <!-- Navigation Menu -->
         <nav class="space-y-1 text-sm font-medium">
           <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
             <i data-lucide="layout-grid" class="w-4 h-4"></i>
@@ -46,7 +50,12 @@
               <i data-lucide="chevron-down" class="w-4 h-4"></i>
             </button>
             <div class="pl-9 pr-2 py-1 space-y-1">
-              <a href="#" class="block px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md">Input Dokumen</a>
+              <button onclick="switchRoleView('admin')" id="nav-admin" class="w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors">
+                Input Renaksi (Admin)
+              </button>
+              <button onclick="switchRoleView('kl')" id="nav-kl" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors">
+                Input Renaksi KL (BKKBN)
+              </button>
               <a href="#" class="block px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md">Evaluasi Capaian</a>
             </div>
           </div>
@@ -61,7 +70,6 @@
 
     <!-- MAIN CONTENT AREA -->
     <main class="flex-1 flex flex-col min-w-0">
-      <!-- Topbar Header -->
       <header class="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between">
         <div class="w-96 relative">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -78,31 +86,30 @@
           <button class="relative p-2 text-slate-400 hover:text-slate-600">
             <i data-lucide="bell" class="w-5 h-5"></i>
           </button>
+          
           <div class="flex items-center gap-2 pl-2">
             <div class="text-right">
-              <p class="text-xs font-bold text-slate-800">Kementerian / Lembaga Terkait</p>
-              <p class="text-[10px] text-slate-500">----</p>
+              <p id="userProfileName" class="text-xs font-bold text-slate-800">Admin Jakduk</p>
+              <p id="userProfileRole" class="text-[10px] text-slate-500">Administrator System</p>
             </div>
-            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
-              U
+            <div id="userProfileAvatar" class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
+              A
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Dashboard Content Body -->
       <div class="p-8 space-y-6 flex-1 overflow-y-auto">
-        <!-- Title & Primary Actions -->
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-2xl font-bold text-slate-900">KEMENTERIAN / LEMBAGA</h2>
+            <h2 id="mainPageTitle" class="text-2xl font-bold text-slate-900">KEMENTERIAN / LEMBAGA (ADMIN)</h2>
             <div class="flex items-center gap-2 text-xs text-slate-500 mt-1">
               <span>NASIONAL</span>
               <span class="px-2 py-0.5 bg-slate-200 text-slate-700 rounded font-semibold text-[10px]">STATUS: HASIL TELAAH: DRAFT</span>
             </div>
           </div>
           <div class="flex gap-3">
-            <button class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+            <button id="btnTelaah" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
               <i data-lucide="send" class="w-3.5 h-3.5"></i> Ajukan Permintaan Telaah
             </button>
             <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
@@ -111,7 +118,6 @@
           </div>
         </div>
 
-        <!-- MAIN TAB NAVIGATION (2 TABS) -->
         <div class="bg-white p-1.5 rounded-xl border border-slate-200 flex gap-2 shadow-sm">
           <button onclick="switchTab('section2')" id="tab-section2" class="tab-btn flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-100">
             <i data-lucide="line-chart" class="w-4 h-4"></i>
@@ -123,7 +129,6 @@
           </button>
         </div>
 
-        <!-- SECTION CONTENT CONTAINER -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           
           <!-- SECTION CAPAIAN INDIKATOR -->
@@ -137,9 +142,6 @@
                 <select id="yearFilter2" class="bg-slate-100 border border-slate-300 text-xs font-semibold rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="2025">2025</option>
                   <option value="2026">2026</option>
-                  <option value="2027">2027</option>
-                  <option value="2028">2028</option>
-                  <option value="2029">2029</option>
                 </select>
               </div>
             </div>
@@ -152,46 +154,26 @@
                     <th class="p-3 min-w-[200px]">Indikator PJPK per Sasaran</th>
                     <th class="p-3 w-32">Satuan</th>
                     <th class="p-3 w-40">Sumber Data</th>
-                    <th class="p-3 w-28">Target (Dokumen)</th>
-                    <th class="p-3 w-36">Capaian (Input Admin Jakduk)</th>
-                    <th class="p-3 w-28 text-center">Status Capaian</th>
-                    <th class="p-3 w-56">Kendala / Tanggapan Renaksi</th>
+                    <th class="p-3 w-28">Target</th>
+                    <th class="p-3 w-36">Capaian</th>
+                    <th class="p-3 w-28 text-center">Status</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200">
                   <tr class="bg-teal-700 text-white font-bold">
-                    <td colspan="8" class="p-2.5 px-4 text-xs tracking-wide">
+                    <td colspan="7" class="p-2.5 px-4 text-xs tracking-wide">
                       SASARAN 1: PENGELOLAAN KUANTITAS PENDUDUK
                     </td>
                   </tr>
-                  <!-- Indikator 1 -->
                   <tr class="hover:bg-slate-50">
                     <td class="p-3 text-center font-medium text-slate-500">1</td>
                     <td class="p-3 font-semibold text-slate-800">1. Total Fertility Rate (TFR)</td>
                     <td class="p-3"><input type="text" value="Anak / WUS" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
                     <td class="p-3"><input type="text" value="SDKI / BPS" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
                     <td class="p-3"><input type="text" value="2.1" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-md font-semibold text-slate-600"></td>
-                    <td class="p-3"><input type="text" value="2.1" oninput="updateStatus(this, '2.1', 'status-1', 'kendala-1')" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
+                    <td class="p-3"><input type="text" value="2.1" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
                     <td class="p-3 text-center">
-                      <span id="status-1" class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300">Hijau</span>
-                    </td>
-                    <td class="p-3">
-                      <textarea id="kendala-1" placeholder="Isi kendala jika merah..." disabled class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none text-xs disabled:bg-slate-100 disabled:text-slate-400" rows="1">-</textarea>
-                    </td>
-                  </tr>
-                  <!-- Indikator 2 -->
-                  <tr class="hover:bg-slate-50">
-                    <td class="p-3 text-center font-medium text-slate-500">2</td>
-                    <td class="p-3 font-semibold text-slate-800">2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun</td>
-                    <td class="p-3"><input type="text" value="Kelahiran per 1000 WUS" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
-                    <td class="p-3"><input type="text" value="BPS / Sensus" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
-                    <td class="p-3"><input type="text" value="18" readonly class="w-full p-2 bg-slate-100 border border-slate-200 rounded-md font-semibold text-slate-600"></td>
-                    <td class="p-3"><input type="text" value="22" oninput="updateStatus(this, '18', 'status-2', 'kendala-2', true)" class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"></td>
-                    <td class="p-3 text-center">
-                      <span id="status-2" class="px-3 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-300">Merah</span>
-                    </td>
-                    <td class="p-3">
-                      <textarea id="kendala-2" placeholder="Isi kendala jika merah..." class="w-full p-2 border rounded-md border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none text-xs" rows="1">Sosialisasi belum mencakup daerah terpencil</textarea>
+                      <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300">Hijau</span>
                     </td>
                   </tr>
                 </tbody>
@@ -201,139 +183,189 @@
 
           <!-- SECTION IMPLEMENTASI RENAKSI -->
           <div id="section3" class="tab-content p-5 space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            
+            <!-- SEARCH AND FILTER CONTROLS -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
               <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                 <i data-lucide="list-checks" class="w-4 h-4 text-blue-600"></i> Implementasi Rencana Aksi
               </h3>
-              <div class="flex items-center gap-2">
-                <label for="yearFilter3" class="text-xs font-semibold text-slate-600">Filter Tahun:</label>
-                <select id="yearFilter3" class="bg-slate-100 border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1 outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="2025">2025</option>
-                  <option value="2026">2026</option>
-                  <option value="2027">2027</option>
-                  <option value="2028">2028</option>
-                  <option value="2029">2029</option>
-                </select>
+
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="relative w-56">
+                  <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input type="text" id="searchIndikator" onkeyup="filterTable()" placeholder="Cari Indikator / Renaksi..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                  <label for="filterPengampu" class="text-xs font-semibold text-slate-600">K/L Pengampu:</label>
+                  <select id="filterPengampu" onchange="filterTable()" class="bg-slate-50 border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1.5 outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="ALL">Semua K/L Pengampu</option>
+                    <option value="BKKBN">BKKBN</option>
+                    <option value="Kemenkes">Kemenkes</option>
+                    <option value="Kemendikbudristek">Kemendikbudristek</option>
+                    <option value="Kemensos">Kemensos</option>
+                    <option value="KemenPPPA">KemenPPPA</option>
+                    <option value="Bappenas">Bappenas</option>
+                  </select>
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                  <label for="yearFilter3" class="text-xs font-semibold text-slate-600">Tahun:</label>
+                  <select id="yearFilter3" class="bg-slate-50 border border-slate-300 text-xs font-semibold rounded-lg px-2.5 py-1.5 outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                  </select>
+                </div>
               </div>
             </div>
 
+            <!-- TABLE IMPLEMENTASI RENAKSI -->
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs border-collapse">
+              <table class="w-full text-left text-xs border-collapse" id="renaksiTable">
                 <tbody class="divide-y divide-slate-200">
-                  <!-- Header Sasaran -->
-                  <tr class="bg-teal-700 text-white font-bold">
-                    <td colspan="8" class="p-2.5 px-4 text-xs tracking-wide uppercase">
+                  <tr class="bg-teal-700 text-white font-bold sasaran-header">
+                    <td colspan="10" class="p-2.5 px-4 text-xs tracking-wide uppercase">
                       SASARAN 1: PENGELOLAAN KUANTITAS PENDUDUK
                     </td>
                   </tr>
 
                   <!-- GRUP INDIKATOR 1 -->
-                  <!-- Baris Judul Indikator 1 -->
-                  <tr class="bg-slate-50/80 border-b border-slate-200">
-                    <td colspan="8" class="p-3">
+                  <tr class="bg-slate-50/80 border-b border-slate-200 indikator-group" data-indikator="1. Total Fertility Rate (TFR)">
+                    <td colspan="10" class="p-3">
                       <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-800 text-sm">1. Total Fertility Rate (TFR)</span>
-                        <button onclick="addRenaksi(this)" class="flex items-center gap-1.5 px-3 py-1 bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-md text-xs font-semibold transition shadow-sm">
+                        <span class="font-bold text-slate-800 text-sm indikator-title">1. Total Fertility Rate (TFR)</span>
+                        <button onclick="openModal(this)" class="admin-only flex items-center gap-1.5 px-3 py-1 bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-md text-xs font-semibold transition shadow-sm">
                           <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Renaksi
                         </button>
                       </div>
                     </td>
                   </tr>
 
-                  <!-- Header Kolom Tabel Indikator 1 -->
-                  <tr class="bg-white border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px] header-kolom-renaksi">
-                    <td class="p-2.5 w-1/5">RENCANA AKSI</td>
+                  <tr class="bg-white border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px] header-kolom-renaksi indikator-group" data-indikator="1. Total Fertility Rate (TFR)">
+                    <td class="p-2.5 w-1/6">RENCANA AKSI</td>
                     <td class="p-2.5 w-1/6">KELUARAN</td>
                     <td class="p-2.5 w-1/5">DESKRIPSI PELAKSANAAN</td>
                     <td class="p-2.5 w-1/6">BUKTI DUKUNG (LINK)</td>
                     <td class="p-2.5 w-1/5">DAYA DUKUNG / KENDALA</td>
-                    <td class="p-2.5 w-28">K/L PENGAMPU</td>
-                    <td class="p-2.5 w-28">K/L TERKAIT</td>
-                    <td class="p-2.5 w-10 text-center">AKSI</td>
+                    <td class="p-2.5 w-20">K/L PENGAMPU</td>
+                    <td class="p-2.5 w-20">K/L TERKAIT</td>
+                    <td class="admin-only p-2.5 w-28 text-center">VALIDASI</td>
+                    <td class="p-2.5 w-48">CATATAN PERBAIKAN</td>
+                    <td class="admin-only p-2.5 w-16 text-center">AKSI</td>
                   </tr>
 
-                  <!-- Row Input Renaksi 1 -->
-                  <tr class="renaksi-row hover:bg-slate-50/50">
+                  <!-- Baris 1: BKKBN -->
+                  <tr class="renaksi-row hover:bg-slate-50/50" data-pengampu="BKKBN" data-indikator="1. Total Fertility Rate (TFR)">
+                    <td class="p-2.5 align-top font-medium text-slate-800 cell-rencana-aksi">Pelaksanaan Kampanye Keluarga Berencana di Daerah Terpencil</td>
+                    <td class="p-2.5 align-top text-slate-600 cell-keluaran">Terlaksananya 12 Kali Sosialisasi</td>
+                    
+                    <!-- DESKRIPSI PELAKSANAAN -->
                     <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Rencana aksi baru..."></textarea>
+                      <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi deskripsi..." class="kl-input cell-deskripsi auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">Sosialisasi telah diselenggarakan di 12 titik terpencil dengan total peserta 500 orang dari target awal 400 orang.</textarea>
                     </td>
+
+                    <!-- BUKTI DUKUNG -->
                     <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isian User..."></textarea>
+                      <input type="text" placeholder="https://..." value="https://link-bukti.com/laporan" class="kl-input cell-bukti w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-blue-600 underline outline-none focus:ring-1 focus:ring-blue-500">
                     </td>
+
+                    <!-- DAYA DUKUNG / KENDALA -->
                     <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Deskripsikan..."></textarea>
+                      <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi kendala..." class="kl-input cell-kendala auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">Akses transportasi ke wilayah terpencil agak sulit, namun didukung penuh oleh Dinas Kesehatan Pemda setempat.</textarea>
                     </td>
-                    <td class="p-2.5 align-top">
-                      <input type="url" placeholder="https://link-bukti.com" class="w-full p-2 border rounded border-slate-200 text-xs text-blue-600 outline-none focus:ring-1 focus:ring-blue-500">
+
+                    <td class="p-2.5 align-top text-slate-700 font-semibold cell-pengampu">BKKBN</td>
+                    <td class="p-2.5 align-top text-slate-700 cell-terkait">Kemenkes</td>
+
+                    <td class="admin-only p-2.5 align-top text-center">
+                      <label class="relative inline-flex items-center cursor-pointer my-1">
+                        <input type="checkbox" checked onchange="toggleValidasiState(this)" class="sr-only peer cell-validasi-toggle">
+                        <div class="w-11 h-6 bg-rose-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                      </label>
+                      <span class="block text-[10px] font-bold text-emerald-600 status-label-validasi">VALID</span>
                     </td>
-                    <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isi daya dukung/kendala..."></textarea>
+
+                    <!-- CATATAN PERBAIKAN -->
+                    <td class="p-2.5 align-top cell-catatan-container">
+                      <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Tambah catatan..." class="cell-catatan auto-expand w-full p-2 border rounded border-slate-200 text-xs text-slate-700 focus:ring-1 focus:ring-blue-500 outline-none">Data sudah lengkap dan sesuai dengan target keluaran.</textarea>
                     </td>
-                    <td class="p-2.5 align-top">
-                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-                    </td>
-                    <td class="p-2.5 align-top">
-                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-                    </td>
-                    <td class="p-2.5 align-top text-center">
-                      <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition mt-1">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                      </button>
+
+                    <td class="admin-only p-2.5 align-top text-center">
+                      <div class="flex items-center justify-center gap-1 mt-1">
+                        <button onclick="editRenaksi(this)" title="Edit Baris" class="p-1.5 text-slate-400 hover:text-blue-600 rounded transition">
+                          <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition">
+                          <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                      </div>
                     </td>
                   </tr>
 
                   <!-- GRUP INDIKATOR 2 -->
-                  <!-- Baris Judul Indikator 2 -->
-                  <tr class="bg-slate-50/80 border-b border-slate-200">
-                    <td colspan="8" class="p-3">
+                  <tr class="bg-slate-50/80 border-b border-slate-200 indikator-group" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun">
+                    <td colspan="10" class="p-3">
                       <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-800 text-sm">2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun</span>
-                        <button onclick="addRenaksi(this)" class="flex items-center gap-1.5 px-3 py-1 bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-md text-xs font-semibold transition shadow-sm">
+                        <span class="font-bold text-slate-800 text-sm indikator-title">2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun</span>
+                        <button onclick="openModal(this)" class="admin-only flex items-center gap-1.5 px-3 py-1 bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-md text-xs font-semibold transition shadow-sm">
                           <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Tambah Renaksi
                         </button>
                       </div>
                     </td>
                   </tr>
 
-                  <!-- Header Kolom Tabel Indikator 2 -->
-                  <tr class="bg-white border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px] header-kolom-renaksi">
-                    <td class="p-2.5 w-1/5">RENCANA AKSI</td>
+                  <tr class="bg-white border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px] header-kolom-renaksi indikator-group" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun">
+                    <td class="p-2.5 w-1/6">RENCANA AKSI</td>
                     <td class="p-2.5 w-1/6">KELUARAN</td>
                     <td class="p-2.5 w-1/5">DESKRIPSI PELAKSANAAN</td>
                     <td class="p-2.5 w-1/6">BUKTI DUKUNG (LINK)</td>
                     <td class="p-2.5 w-1/5">DAYA DUKUNG / KENDALA</td>
-                    <td class="p-2.5 w-28">K/L PENGAMPU</td>
-                    <td class="p-2.5 w-28">K/L TERKAIT</td>
-                    <td class="p-2.5 w-10 text-center">AKSI</td>
+                    <td class="p-2.5 w-20">K/L PENGAMPU</td>
+                    <td class="p-2.5 w-20">K/L TERKAIT</td>
+                    <td class="admin-only p-2.5 w-28 text-center">VALIDASI</td>
+                    <td class="p-2.5 w-48">CATATAN PERBAIKAN</td>
+                    <td class="admin-only p-2.5 w-16 text-center">AKSI</td>
                   </tr>
 
-                  <!-- Row Input Renaksi Indikator 2 -->
-                  <tr class="renaksi-row hover:bg-slate-50/50">
+                  <!-- Baris 2: Kemendikbudristek -->
+                  <tr class="renaksi-row hover:bg-slate-50/50" data-pengampu="Kemendikbudristek" data-indikator="2. Age-Specific Fertility Rate (ASFR) 15–19 Tahun">
+                    <td class="p-2.5 align-top font-medium text-slate-800 cell-rencana-aksi">Edukasi Kesehatan Reproduksi Remaja di Sekolah</td>
+                    <td class="p-2.5 align-top text-slate-600 cell-keluaran">Laporan Edukasi Remaja</td>
+                    
                     <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Rencana aksi baru..."></textarea>
+                      <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi deskripsi..." class="kl-input cell-deskripsi auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">Pelatihan kesehatan reproduksi di 50 SMA tingkat provinsi.</textarea>
                     </td>
                     <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isian User..."></textarea>
+                      <input type="text" placeholder="https://..." value="https://link-bukti.com/edukasi" class="kl-input cell-bukti w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-blue-600 underline outline-none focus:ring-1 focus:ring-blue-500">
                     </td>
                     <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Deskripsikan..."></textarea>
+                      <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi kendala..." class="kl-input cell-kendala auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">Kurangnya tenaga fasilitator terampil di tingkat kabupaten.</textarea>
                     </td>
-                    <td class="p-2.5 align-top">
-                      <input type="url" placeholder="https://link-bukti.com" class="w-full p-2 border rounded border-slate-200 text-xs text-blue-600 outline-none focus:ring-1 focus:ring-blue-500">
+
+                    <td class="p-2.5 align-top text-slate-700 font-semibold cell-pengampu">Kemendikbudristek</td>
+                    <td class="p-2.5 align-top text-slate-700 cell-terkait">Kemenkes, BKKBN</td>
+
+                    <td class="admin-only p-2.5 align-top text-center">
+                      <label class="relative inline-flex items-center cursor-pointer my-1">
+                        <input type="checkbox" onchange="toggleValidasiState(this)" class="sr-only peer cell-validasi-toggle">
+                        <div class="w-11 h-6 bg-rose-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                      </label>
+                      <span class="block text-[10px] font-bold text-rose-600 status-label-validasi">PERBAIKAN</span>
                     </td>
-                    <td class="p-2.5 align-top">
-                      <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isi daya dukung/kendala..."></textarea>
+
+                    <td class="p-2.5 align-top cell-catatan-container">
+                      <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Tambah catatan..." class="cell-catatan auto-expand w-full p-2 border rounded border-slate-200 text-xs text-slate-700 focus:ring-1 focus:ring-blue-500 outline-none">Mohon tambahkan daftar sekolah penerima edukasi pada tautan bukti dukung.</textarea>
                     </td>
-                    <td class="p-2.5 align-top">
-                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-                    </td>
-                    <td class="p-2.5 align-top">
-                      <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-                    </td>
-                    <td class="p-2.5 align-top text-center">
-                      <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition mt-1">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                      </button>
+
+                    <td class="admin-only p-2.5 align-top text-center">
+                      <div class="flex items-center justify-center gap-1 mt-1">
+                        <button onclick="editRenaksi(this)" title="Edit Baris" class="p-1.5 text-slate-400 hover:text-blue-600 rounded transition">
+                          <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition">
+                          <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                      </div>
                     </td>
                   </tr>
 
@@ -347,12 +379,245 @@
     </main>
   </div>
 
+  <!-- MODAL FORM INPUT & EDIT -->
+  <div id="renaksiModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-xl mx-4 overflow-hidden">
+      <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
+        <h3 id="modalTitle" class="font-bold text-slate-800 text-sm flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-blue-600"></i> Tambah Rencana Aksi
+        </h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="renaksiForm" onsubmit="saveRenaksi(event)" class="p-5 space-y-4 text-xs max-h-[80vh] overflow-y-auto">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Rencana Aksi <span class="text-rose-500">*</span></label>
+          <textarea id="modalRencanaAksi" required rows="2" placeholder="Masukkan rencana aksi..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Keluaran <span class="text-rose-500">*</span></label>
+          <textarea id="modalKeluaran" required rows="2" placeholder="Masukkan target/keluaran..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">K/L Pengampu <span class="text-rose-500">*</span></label>
+            <select id="modalPengampu" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="" disabled selected>Pilih K/L Pengampu...</option>
+              <option value="BKKBN">BKKBN</option>
+              <option value="Kemenkes">Kemenkes</option>
+              <option value="Kemendikbudristek">Kemendikbudristek</option>
+              <option value="Kemensos">Kemensos</option>
+              <option value="KemenPPPA">KemenPPPA</option>
+              <option value="Bappenas">Bappenas</option>
+            </select>
+          </div>
+
+          <div class="relative">
+            <label class="block font-semibold text-slate-700 mb-1">K/L Terkait</label>
+            <button type="button" onclick="toggleMultiSelect()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-left flex items-center justify-between focus:ring-2 focus:ring-blue-500 outline-none">
+              <span id="multiSelectLabel" class="text-slate-400 truncate">Pilih K/L Terkait...</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
+            </button>
+
+            <div id="multiSelectOptions" class="absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg hidden max-h-40 overflow-y-auto p-2 space-y-1">
+              <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                <input type="checkbox" value="BKKBN" onchange="updateMultiSelectText()" class="kl-terkait-checkbox rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span>BKKBN</span>
+              </label>
+              <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                <input type="checkbox" value="Kemenkes" onchange="updateMultiSelectText()" class="kl-terkait-checkbox rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span>Kemenkes</span>
+              </label>
+              <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                <input type="checkbox" value="Kemendikbudristek" onchange="updateMultiSelectText()" class="kl-terkait-checkbox rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span>Kemendikbudristek</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="modalExtraFields" class="space-y-4 pt-3 border-t border-slate-200">
+          <p class="font-bold text-xs text-blue-600">EDIT ISIAN PELAKSANAAN (ADMIN):</p>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Deskripsi Pelaksanaan</label>
+            <textarea id="modalDeskripsi" rows="2" placeholder="Masukkan deskripsi..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Bukti Dukung (Link URL)</label>
+            <input type="url" id="modalBukti" placeholder="https://link-bukti.com" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-blue-600">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Daya Dukung / Kendala</label>
+            <textarea id="modalKendala" rows="2" placeholder="Masukkan kendala..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow transition">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Initialize Lucide Icons
     lucide.createIcons();
 
-    // Tab Switcher Logic
+    let currentRole = 'admin'; 
+    const klUserIdentity = 'BKKBN';
+
+    // FUNGSI UTAMA AUTO-EXPAND TEXTAREA (BEBAS SCROLLBAR)
+    function autoExpandTextarea(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Terapkan penyesuaian tinggi ke semua textarea saat halaman dimuat
+    function adjustAllTextareas() {
+      document.querySelectorAll('textarea.auto-expand').forEach(textarea => {
+        autoExpandTextarea(textarea);
+      });
+    }
+
+    // SEARCH & FILTER FUNCTION
+    function filterTable() {
+      const searchInputValue = document.getElementById('searchIndikator').value.toLowerCase().trim();
+      const selectedPengampu = document.getElementById('filterPengampu').value;
+
+      const rows = document.querySelectorAll('.renaksi-row');
+      const groupHeaders = document.querySelectorAll('.indikator-group');
+
+      const activeIndikators = {};
+
+      rows.forEach(row => {
+        const rowPengampu = row.getAttribute('data-pengampu');
+        const rowIndikator = row.getAttribute('data-indikator').toLowerCase();
+        const renaksiText = row.querySelector('.cell-rencana-aksi').innerText.toLowerCase();
+
+        const matchesSearch = rowIndikator.includes(searchInputValue) || renaksiText.includes(searchInputValue);
+        const matchesPengampu = (selectedPengampu === 'ALL') || (rowPengampu === selectedPengampu);
+
+        if (matchesSearch && matchesPengampu) {
+          row.style.display = '';
+          activeIndikators[row.getAttribute('data-indikator')] = true;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      groupHeaders.forEach(header => {
+        const groupIndikatorName = header.getAttribute('data-indikator');
+        if (activeIndikators[groupIndikatorName]) {
+          header.style.display = '';
+        } else {
+          header.style.display = 'none';
+        }
+      });
+
+      // Penyesuaian ulang tinggi teks setelah filter
+      adjustAllTextareas();
+    }
+
+    function toggleValidasiState(checkbox) {
+      const parent = checkbox.closest('td');
+      const label = parent.querySelector('.status-label-validasi');
+      if (checkbox.checked) {
+        label.innerText = 'VALID';
+        label.className = 'block text-[10px] font-bold text-emerald-600 status-label-validasi';
+      } else {
+        label.innerText = 'PERBAIKAN';
+        label.className = 'block text-[10px] font-bold text-rose-600 status-label-validasi';
+      }
+    }
+
+    // PERUBAHAN PERAN USER (ADMIN & KL)
+    function switchRoleView(role) {
+      currentRole = role;
+
+      const navAdmin = document.getElementById('nav-admin');
+      const navKl = document.getElementById('nav-kl');
+      const title = document.getElementById('mainPageTitle');
+      const btnTelaah = document.getElementById('btnTelaah');
+      const profileName = document.getElementById('userProfileName');
+      const profileRole = document.getElementById('userProfileRole');
+      const profileAvatar = document.getElementById('userProfileAvatar');
+
+      if (role === 'admin') {
+        navAdmin.className = "w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors";
+        navKl.className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
+
+        title.innerText = "KEMENTERIAN / LEMBAGA (ADMIN)";
+        btnTelaah.classList.remove('hidden');
+        profileName.innerText = "Admin Jakduk";
+        profileRole.innerText = "Administrator System";
+        profileAvatar.innerText = "A";
+
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+
+        // Mode Admin: Tiga kolom KL dikunci (ReadOnly), Catatan Perbaikan Aktif
+        document.querySelectorAll('.renaksi-row').forEach(row => {
+          row.querySelectorAll('.kl-input').forEach(input => {
+            input.setAttribute('readonly', 'readonly');
+            input.classList.remove('bg-white', 'border-slate-300');
+            input.classList.add('bg-slate-50', 'border-slate-200');
+          });
+          
+          const catatanInput = row.querySelector('.cell-catatan');
+          if (catatanInput) {
+            catatanInput.removeAttribute('readonly');
+            catatanInput.classList.remove('bg-slate-50', 'border-transparent');
+            catatanInput.classList.add('bg-white', 'border-slate-300');
+          }
+        });
+
+      } else {
+        // Mode KL
+        navKl.className = "w-full text-left px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-100/60 rounded-md transition-colors";
+        navAdmin.className = "w-full text-left px-3 py-2 text-xs font-medium text-slate-500 hover:bg-slate-100 rounded-md transition-colors";
+
+        title.innerText = "INPUT RENAKSI K/L (" + klUserIdentity + ")";
+        btnTelaah.classList.add('hidden');
+        profileName.innerText = klUserIdentity;
+        profileRole.innerText = "Pengguna K/L Pengampu";
+        profileAvatar.innerText = "BK";
+
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+
+        // Mode KL: Hanya pengampu yang sesuai yang BISA mengisi dalam KOTAK / BOX
+        document.querySelectorAll('.renaksi-row').forEach(row => {
+          const pengampu = row.getAttribute('data-pengampu');
+          const isOwner = (pengampu === klUserIdentity);
+
+          row.querySelectorAll('.kl-input').forEach(input => {
+            if (isOwner) {
+              input.removeAttribute('readonly');
+              input.classList.remove('bg-slate-50', 'border-slate-200');
+              input.classList.add('bg-white', 'border-slate-300', 'shadow-sm');
+            } else {
+              input.setAttribute('readonly', 'readonly');
+              input.classList.remove('bg-white', 'border-slate-300', 'shadow-sm');
+              input.classList.add('bg-slate-50', 'border-slate-200');
+            }
+          });
+
+          // Catatan Perbaikan Read-Only untuk KL
+          const catatanInput = row.querySelector('.cell-catatan');
+          if (catatanInput) {
+            catatanInput.setAttribute('readonly', 'readonly');
+            catatanInput.classList.remove('bg-white', 'border-slate-300');
+            catatanInput.classList.add('bg-slate-50', 'border-transparent');
+          }
+        });
+      }
+
+      adjustAllTextareas();
+    }
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -365,88 +630,168 @@
       const activeBtn = document.getElementById('tab-' + tabId);
       activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow');
       activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+
+      adjustAllTextareas();
     }
 
-    // Dynamic Status Indicator Logic
-    function updateStatus(inputEl, targetVal, statusId, kendalaId, isLowerBetter = false) {
-      const val = parseFloat(inputEl.value);
-      const target = parseFloat(targetVal);
-      const statusEl = document.getElementById(statusId);
-      const kendalaEl = document.getElementById(kendalaId);
+    function toggleMultiSelect() {
+      document.getElementById('multiSelectOptions').classList.toggle('hidden');
+    }
 
-      let isSuccess = isLowerBetter ? (val <= target) : (val >= target);
-
-      if (isNaN(val)) {
-        statusEl.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-300";
-        statusEl.innerText = "Pending";
-        kendalaEl.disabled = true;
-      } else if (isSuccess) {
-        statusEl.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300";
-        statusEl.innerText = "Hijau";
-        kendalaEl.disabled = true;
-        kendalaEl.value = "-";
+    function updateMultiSelectText() {
+      const checkedBoxes = Array.from(document.querySelectorAll('.kl-terkait-checkbox:checked'));
+      const label = document.getElementById('multiSelectLabel');
+      
+      if (checkedBoxes.length === 0) {
+        label.innerText = 'Pilih K/L Terkait...';
+        label.className = 'text-slate-400 truncate';
       } else {
-        statusEl.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-300";
-        statusEl.innerText = "Merah";
-        kendalaEl.disabled = false;
+        label.innerText = checkedBoxes.map(cb => cb.value).join(', ');
+        label.className = 'text-slate-800 font-medium truncate';
       }
     }
 
-    // Fixed Add Renaksi Row Logic: Always insert below the last input row of the current section
-    function addRenaksi(btn) {
-      const headerRow = btn.closest('tr');
-      let insertAfterRow = headerRow;
+    let currentTriggerHeader = null;
+    let editingRow = null;
 
-      // Cari baris terakhir dalam kelompok indikator ini (sebelum baris indikator berikutnya atau akhir tabel)
-      let nextRow = headerRow.nextElementSibling;
-      while (nextRow && !nextRow.querySelector('button[onclick^="addRenaksi"]') && !nextRow.classList.contains('bg-teal-700')) {
-        insertAfterRow = nextRow;
-        nextRow = nextRow.nextElementSibling;
+    function openModal(btn) {
+      editingRow = null;
+      currentTriggerHeader = btn.closest('tr');
+      document.getElementById('modalTitle').innerText = "Tambah Rencana Aksi";
+      document.getElementById('renaksiForm').reset();
+      document.getElementById('modalExtraFields').classList.add('hidden');
+      
+      document.querySelectorAll('.kl-terkait-checkbox').forEach(cb => cb.checked = false);
+      updateMultiSelectText();
+
+      document.getElementById('renaksiModal').classList.remove('hidden');
+    }
+
+    function editRenaksi(btn) {
+      editingRow = btn.closest('tr');
+      document.getElementById('modalTitle').innerText = "Edit Rencana Aksi & Isian KL";
+      document.getElementById('modalExtraFields').classList.remove('hidden');
+      
+      document.getElementById('modalRencanaAksi').value = editingRow.querySelector('.cell-rencana-aksi').innerText;
+      document.getElementById('modalKeluaran').value = editingRow.querySelector('.cell-keluaran').innerText;
+      document.getElementById('modalPengampu').value = editingRow.querySelector('.cell-pengampu').innerText;
+
+      document.getElementById('modalDeskripsi').value = editingRow.querySelector('.cell-deskripsi').value;
+      document.getElementById('modalBukti').value = editingRow.querySelector('.cell-bukti').value;
+      document.getElementById('modalKendala').value = editingRow.querySelector('.cell-kendala').value;
+
+      const terkaitText = editingRow.querySelector('.cell-terkait').innerText;
+      const terkaitArray = terkaitText.split(',').map(s => s.trim());
+      
+      document.querySelectorAll('.kl-terkait-checkbox').forEach(cb => {
+        cb.checked = terkaitArray.includes(cb.value);
+      });
+      updateMultiSelectText();
+
+      document.getElementById('renaksiModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('renaksiModal').classList.add('hidden');
+      document.getElementById('renaksiForm').reset();
+      editingRow = null;
+      currentTriggerHeader = null;
+    }
+
+    function saveRenaksi(e) {
+      e.preventDefault();
+
+      const rencanaAksi = document.getElementById('modalRencanaAksi').value;
+      const keluaran = document.getElementById('modalKeluaran').value;
+      const pengampu = document.getElementById('modalPengampu').value;
+
+      const checkedBoxes = Array.from(document.querySelectorAll('.kl-terkait-checkbox:checked'));
+      const terkait = checkedBoxes.length > 0 ? checkedBoxes.map(cb => cb.value).join(', ') : '-';
+
+      const deskripsi = document.getElementById('modalDeskripsi').value || '-';
+      const bukti = document.getElementById('modalBukti').value || '';
+      const kendala = document.getElementById('modalKendala').value || '-';
+
+      if (editingRow) {
+        editingRow.querySelector('.cell-rencana-aksi').innerText = rencanaAksi;
+        editingRow.querySelector('.cell-keluaran').innerText = keluaran;
+        editingRow.querySelector('.cell-pengampu').innerText = pengampu;
+        editingRow.querySelector('.cell-terkait').innerText = terkait;
+        editingRow.setAttribute('data-pengampu', pengampu);
+
+        editingRow.querySelector('.cell-deskripsi').value = deskripsi;
+        editingRow.querySelector('.cell-bukti').value = bukti;
+        editingRow.querySelector('.cell-kendala').value = kendala;
+
+      } else if (currentTriggerHeader) {
+        const parentIndikator = currentTriggerHeader.getAttribute('data-indikator');
+        
+        let insertAfterRow = currentTriggerHeader;
+        let nextRow = currentTriggerHeader.nextElementSibling;
+        while (nextRow && !nextRow.classList.contains('indikator-group') && !nextRow.classList.contains('sasaran-header')) {
+          insertAfterRow = nextRow;
+          nextRow = nextRow.nextElementSibling;
+        }
+
+        const newRow = document.createElement('tr');
+        newRow.className = "renaksi-row hover:bg-slate-50/50";
+        newRow.setAttribute('data-pengampu', pengampu);
+        newRow.setAttribute('data-indikator', parentIndikator);
+        newRow.innerHTML = `
+          <td class="p-2.5 align-top font-medium text-slate-800 cell-rencana-aksi">${rencanaAksi}</td>
+          <td class="p-2.5 align-top text-slate-600 cell-keluaran">${keluaran}</td>
+          <td class="p-2.5 align-top">
+            <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi deskripsi..." class="kl-input cell-deskripsi auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">${deskripsi}</textarea>
+          </td>
+          <td class="p-2.5 align-top">
+            <input type="text" placeholder="https://..." value="${bukti}" class="kl-input cell-bukti w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-blue-600 underline outline-none focus:ring-1 focus:ring-blue-500">
+          </td>
+          <td class="p-2.5 align-top">
+            <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Isi kendala..." class="kl-input cell-kendala auto-expand w-full p-2 border border-slate-300 rounded-md bg-white text-xs text-slate-700 outline-none focus:ring-1 focus:ring-blue-500">${kendala}</textarea>
+          </td>
+          <td class="p-2.5 align-top text-slate-700 font-semibold cell-pengampu">${pengampu}</td>
+          <td class="p-2.5 align-top text-slate-700 cell-terkait">${terkait}</td>
+          <td class="admin-only p-2.5 align-top text-center">
+            <label class="relative inline-flex items-center cursor-pointer my-1">
+              <input type="checkbox" checked onchange="toggleValidasiState(this)" class="sr-only peer cell-validasi-toggle">
+              <div class="w-11 h-6 bg-rose-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+            <span class="block text-[10px] font-bold text-emerald-600 status-label-validasi">VALID</span>
+          </td>
+          <td class="p-2.5 align-top cell-catatan-container">
+            <textarea oninput="autoExpandTextarea(this)" rows="1" placeholder="Tambah catatan..." class="cell-catatan auto-expand w-full p-2 border rounded border-slate-200 text-xs text-slate-700 focus:ring-1 focus:ring-blue-500 outline-none"></textarea>
+          </td>
+          <td class="admin-only p-2.5 align-top text-center">
+            <div class="flex items-center justify-center gap-1 mt-1">
+              <button onclick="editRenaksi(this)" title="Edit Baris" class="p-1.5 text-slate-400 hover:text-blue-600 rounded transition">
+                <i data-lucide="pencil" class="w-4 h-4"></i>
+              </button>
+              <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </td>
+        `;
+
+        insertAfterRow.after(newRow);
       }
 
-      // Elemen baris baru
-      const newRow = document.createElement('tr');
-      newRow.className = "renaksi-row hover:bg-slate-50/50";
-      
-      newRow.innerHTML = `
-        <td class="p-2.5 align-top">
-          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Rencana aksi baru..."></textarea>
-        </td>
-        <td class="p-2.5 align-top">
-          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isian User..."></textarea>
-        </td>
-        <td class="p-2.5 align-top">
-          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Deskripsikan..."></textarea>
-        </td>
-        <td class="p-2.5 align-top">
-          <input type="url" placeholder="https://link-bukti.com" class="w-full p-2 border rounded border-slate-200 text-xs text-blue-600 outline-none focus:ring-1 focus:ring-blue-500">
-        </td>
-        <td class="p-2.5 align-top">
-          <textarea class="w-full p-2 border rounded border-slate-200 text-xs focus:ring-1 focus:ring-blue-500 outline-none resize-y" rows="2" placeholder="Isi daya dukung/kendala..."></textarea>
-        </td>
-        <td class="p-2.5 align-top">
-          <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-        </td>
-        <td class="p-2.5 align-top">
-          <input type="text" placeholder="Instansi..." class="w-full p-2 border rounded border-slate-200 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-        </td>
-        <td class="p-2.5 align-top text-center">
-          <button onclick="removeRenaksi(this)" title="Hapus Baris" class="p-1.5 text-slate-400 hover:text-rose-600 rounded transition mt-1">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-          </button>
-        </td>
-      `;
-      
-      // Sisipkan di bawah baris input terakhir
-      insertAfterRow.after(newRow);
       lucide.createIcons();
+      closeModal();
+      switchRoleView(currentRole);
+      filterTable();
     }
 
-    // Remove Renaksi Row Logic
     function removeRenaksi(btn) {
-      const row = btn.closest('tr');
-      row.remove();
+      btn.closest('tr').remove();
+      filterTable();
     }
+
+    // Panggil pengaturan otomatis tinggi teks saat dokumen dimuat awal
+    document.addEventListener("DOMContentLoaded", () => {
+      adjustAllTextareas();
+      switchRoleView('admin');
+    });
   </script>
 </body>
 </html>
