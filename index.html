@@ -755,10 +755,14 @@
             const tr = document.createElement('tr');
             tr.className = "hover:bg-slate-50 border-b border-slate-200";
 
-            let htmlStr = `<td class="p-2.5 border border-slate-200 text-center font-medium text-slate-500 align-top">${rowIndex++}</td>`;
+            let htmlStr = '';
 
+            // Kolom No dan Kementerian di-merge berbarengan menggunakan klSpan
             if (k === i) {
-              htmlStr += `<td rowspan="${klSpan}" class="p-2.5 border border-slate-200 font-semibold text-slate-800 align-top">${item.pengampu}</td>`;
+              htmlStr += `
+                <td rowspan="${klSpan}" class="p-2.5 border border-slate-200 text-center font-medium text-slate-500 align-top">${rowIndex++}</td>
+                <td rowspan="${klSpan}" class="p-2.5 border border-slate-200 font-semibold text-slate-800 align-top">${item.pengampu}</td>
+              `;
             }
 
             if (k === j) {
